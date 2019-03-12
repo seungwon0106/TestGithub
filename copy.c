@@ -23,11 +23,11 @@ int main (int argc, char *argv[])
 
 	fd1 = open(argv[1], O_RDONLY); //Open read file
 	//find error
-	if(fd1<0)
-			printf("fd1 open error\n");
-	fd2 = open(argv[2], O_WRONLY|O_CREAT|O_TRUNC); //Open write file
-	if(fd2<0)
-		printf("fd2 open error\n");
+	if(fd1==-1)
+			printf("%s open error\n", argv[1]);
+	fd2 = open(argv[2], O_WRONLY|O_CREAT|O_TRUNC,0644); //Open write file
+	if(fd2==-1)
+		printf("%s open error\n", argv[2]);
 
 	//read & write
 	while((len = read(fd1,buf,sizeof(buf)))>0)
