@@ -22,6 +22,7 @@ int main (int argc, char *argv[])
 	char buf[BUF_SIZE];
 
 	fd1 = open(argv[1], O_RDONLY); //Open read file
+	//find error
 	if(fd1<0)
 			printf("fd1 open error\n");
 	fd2 = open(argv[2], O_WRONLY|O_CREAT|O_TRUNC); //Open write file
