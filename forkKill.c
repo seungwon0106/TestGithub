@@ -48,6 +48,7 @@ int main(void)
 	else if(pid ==0)
 	{
 		signal(SIGKILL,sig_handler);
+		signal(SIGINT, sig_handler);
 		while(1)
 		{
 			printf("Hello world\n");
@@ -61,7 +62,7 @@ int main(void)
 	}
 
 	wait(&status);
-	
+	pr_exit(status);
 
 	return 0;	
 }
