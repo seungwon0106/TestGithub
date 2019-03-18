@@ -38,7 +38,16 @@ static void sig_inthandler(int signum)
 int main(void)
 {	
 	int status;
+	char *temp;
 	pid_t pid;
+	
+
+	temp = strsignal(SIGINT);
+	printf("%s\n",temp);
+	
+	temp = strsignal(SIGKILL);
+	printf("%s\n",temp);
+
 
 	pid = fork();
 
