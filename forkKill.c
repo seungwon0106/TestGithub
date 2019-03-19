@@ -4,7 +4,7 @@
 #include <wait.h>			//wait()
 #include <signal.h> 		//signal(), kill()
 #include <stdlib.h>
-
+#include <string.h>
 
 void pr_exit(int status)
 {

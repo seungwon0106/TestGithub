@@ -7,9 +7,8 @@
 #include <string.h>
 #include <time.h>
 #include <sys/time.h> // getimeofday( ) 함수에서 사용
-#include <pwd.h>	//getpwuid
-#include <grp.h>
-#include <pwd.h>
+
+
 
 
 void access_perm(char *perm, mode_t mode)
@@ -41,22 +40,11 @@ void access_perm(char *perm, mode_t mode)
 int main (int argc, char *argv[])
 {
 	
-
-	uid_t uid = getuid();
-	gid_t gid = getgid();
- 	struct passwd *pw=getpwuid(uid);
-	struct group *gw=getgrgid(gid);
-
-	gw = getpwent();
-
-	struct stat sb;	
-	struct tm *tm;
-	char timebuf[BUFSIZ];
+	char buf[BUFSIZ];
 	DIR *dp;
 	struct stat statbuf;
 	struct dirent *dent;
 	char perm[11];
-	char buf[100];
 	char pathname[80];
 
 	if(argc<2)
@@ -77,24 +65,11 @@ int main (int argc, char *argv[])
 
 	while((dent = readdir(dp)) != NULL)
 	{
-		
-
 		sprintf(pathname, "%s/%s", argv[1], dent->d_name);
 		lstat(pathname, &statbuf);
 		access_perm(perm, statbuf.st_mode);
 		
-		if(stat(argv[1], &sb)==-1)
-		{
-			fprintf(stderr, "Error : stat()\n");
-			return -1;
-		}
-				
-		tm=localtime(&statbuf.st_mtime);
-		//tm= mtime(&sb.st_mtime);
-		//tm = localtime(&sb.st_atime);
-		strftime(buf, sizeof(buf), "%m %e %H:%M", tm);
-		
-		printf("%s %s %s %12ld %s %s\n", perm, pw->pw_name, gw->gr_name, statbuf.st_size,buf, dent->d_name);
+		printf("%s %8ld %s\n", perm, statbuf.st_size, dent->d_name);
 	
 
 	}

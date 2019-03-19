@@ -132,6 +132,11 @@ int main(int argc, char *argv[])
 		struct tm *tm;	
 
 
+		//Alphabetsort
+		struct dirent **namelist;
+		int idx=0;
+		int count;
+
 		if (argc==1)	
 				flag = 0;
 		strcpy(dirname, ".");
@@ -189,14 +194,19 @@ int main(int argc, char *argv[])
 #endif
 
 
+		count = scandir(dirname, &namelist, NULL, alphasort);
+
+
 		//디렉토리의 내용을 읽어온다.
 		//더이상 읽을 디렉토리 내용이 없을 때까지
-		while((dent = readdir(dp)) != NULL) 
-		{
+	//	while((dent = readdir(dp)) != NULL) 
+	//	{
 
 				if(flag==1 | flag ==3)
 				{
-						sprintf(pathname, "%s/%s", dirname, dent->d_name);
+					for(idx = 0; idx<count; idx++)
+					{
+						sprintf(pathname, "%s/%s", dirname, namelist[idx]->d_name);
 						lstat(pathname, &statbuf);
 						access_perm(perm, statbuf.st_mode);
 						user_pw=getpwuid(statbuf.st_uid);
@@ -204,17 +214,20 @@ int main(int argc, char *argv[])
 						tm = localtime(&statbuf.st_mtime); 
 						strftime(temp, sizeof(temp), "%m월 %e %H:%M", tm); // 사용자 정의 문자열 지정
 
+						printf("%s %ld  %8s:%8s %8ld %s %s\n", perm,statbuf.st_nlink, user_pw->pw_name, group_entry->gr_name, statbuf.st_size, temp,namelist[idx]->d_name);
 
-						printf("%s %ld  %8s:%8s %8ld %s %s\n", perm,statbuf.st_nlink, user_pw->pw_name, group_entry->gr_name, statbuf.st_size, temp,dent->d_name);
+						free(namelist[idx]);
+					}
 
+					
 				}
 				else
 				{
 				}
 
-		}
+		//}
 
-
+		free(namelist);
 		closedir(dp);
 
 		return 0;

@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef int bool;
+#define true 1
+#define false 0
+
+
+int main()
+{
+	char world[10];
+	int len =0,i;
+	bool isPalindrom = true; 
+
+	printf("write the world: \n");
+	fgets(world, sizeof(world), stdin);
+	
+	while(world[len] != '\0')
+			len++;
+
+	for(i=0; i<len/2; i++)
+	{
+			if(world[i] != world[len-i-1])
+			{
+					isPalindrom = false;
+					break;
+			}
+			
+	}
+	if (isPalindrom == true)
+		printf("OK\n");
+	else 
+			printf("ERROR\n");
+
+	return 0;
+	
+}
+
