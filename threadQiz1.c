@@ -4,8 +4,6 @@
 
 //POSIX Thread
 #include <pthread.h>
-
-
 #include <time.h>
 #include <sys/time.h>
 
@@ -29,7 +27,6 @@ void* cal(void * data)
 	{
 		result += i;
 	}
-	//printf("%lld\n", result);
 
 	return (void*)(result);
 
@@ -42,7 +39,7 @@ int main(void)
 	//POSIX thread id data type;
 	pthread_t p_thread;
 	int ret, sum;
-	int a = 1;
+	int a;
 	long long status;
 	int i;
 	struct timeval startTime, endTime;
