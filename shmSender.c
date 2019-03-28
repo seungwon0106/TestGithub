@@ -9,6 +9,18 @@ mT#include <stdio.h>
 
 #define SHMSIZE 100	//int * 100
 
+typedef struct
+{
+	long int msgType; //default 
+	char name[20];
+	int num;
+	int kor;
+	int eng;
+	int mat;
+}MYDATA;
+
+
+
 int main(void)
 {
 	void *shared_Mem = (void*)0; //데이터 타입 x , 주소가 중요, 
@@ -16,6 +28,7 @@ int main(void)
 	int shmid;
 	int *shmaddr;
 	int i;
+	MYDATA person[10];
 	//step0. ftok()
 
 	//step1. shmget
@@ -39,7 +52,7 @@ int main(void)
 	shmaddr = (int*)shared_Mem;
 
 	//step3. memory access
-	for (i = 0; i < SHMSIZE ; i++)
+	for (i = 0; i < SHMSIZE; i++)
 	{
 		*(shmaddr + i) = i + 1;
 		printf("shaddr : %X, data : %d \n", shmaddr + i, *(shmaddr + i));
@@ -47,7 +60,7 @@ int main(void)
 	//sleep(4);
 
 	//step4. shmdt
-	if(shmdt(shared_Mem)==-1)
+	if (shmdt(shared_Mem) == -1)
 	{
 		fprintf(stderr, "shmdt failed\n");
 		exit(EXIT_FAILURE);

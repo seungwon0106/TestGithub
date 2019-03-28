@@ -1,4 +1,4 @@
-mT#include <stdio.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -9,13 +9,28 @@ mT#include <stdio.h>
 
 #define SHMSIZE 100	//int * 100
 
+
+typedef struct
+{
+	long int msgType; //default 
+	char name[20];
+	int num;
+	int kor;
+	int eng;
+	int mat;
+}MYDATA;
+
+
 int main(void)
 {
 	void *shared_Mem = (void*)0; //데이터 타입 x , 주소가 중요, 
 								//NULL값을 넣음(초기값을 안주면 쓰레기값이 들어가기때문에 명시적으로 메모리번지 할당되지 않앗다고 넣어줌 ->잘못된 포인터 접근 방지).
 	int shmid;
 	int *shmaddr;
+	int rdData;
 	int i;
+	MYDATA person[10];
+
 	//step0. ftok()
 
 	//step1. shmget
@@ -39,25 +54,25 @@ int main(void)
 	shmaddr = (int*)shared_Mem;
 
 	//step3. memory access
-	for (i = 0; i < SHMSIZE ; i++)
+	for (i = 0; i < SHMSIZE; i++)
 	{
-		*(shmaddr + i) = i + 1;
-		printf("shaddr : %X, data : %d \n", shmaddr + i, *(shmaddr + i));
+		rdData = *(shmaddr + i);
+		printf("shaddr : %X, data : %d \n", shmaddr + i, rdData);
 	}
 	//sleep(4);
 
 	//step4. shmdt
-	if(shmdt(shared_Mem)==-1)
+	if (shmdt(shared_Mem) == -1)
 	{
 		fprintf(stderr, "shmdt failed\n");
 		exit(EXIT_FAILURE);
 	}
 
-	////step5. shmctl	: IPC_RMID
-	//if(shmctl(shmid, IPC_RMID, 0) == -1)
-	//{
-	//	fprintf(stderr, "shmctl (IPC_RMID) failed\n");
-	//	exit(EXIT_FAILURE);
-	//}
+	//step5. shmctl	: IPC_RMID
+	if (shmctl(shmid, IPC_RMID, 0) == -1)
+	{
+		fprintf(stderr, "shmctl (IPC_RMID) failed\n");
+		exit(EXIT_FAILURE);
+	}
 	exit(EXIT_SUCCESS);
 }
